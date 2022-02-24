@@ -1,0 +1,11 @@
+# ### config file for openfortivpn, see man openfortivpn(1) ###
+#
+host = <vpn_host>
+port = <vpn_port>
+username = <your_user_name>
+password = <secret_password>
+trusted-cert = <maybe_a_cert>
+set-dns=0
+set-routes=0
+pppd-use-peerdns=1
+persistent=5

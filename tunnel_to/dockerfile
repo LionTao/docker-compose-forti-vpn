@@ -1,0 +1,12 @@
+FROM nadoo/glider:v0.15.3
+
+USER root
+
+COPY glider.conf /app/glider.conf
+
+COPY entrypoint.sh /usr/bin/entrypoint.sh
+RUN chmod 755 /usr/bin/entrypoint.sh
+
+WORKDIR /app
+ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
+CMD [ "/app/glider" ]

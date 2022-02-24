@@ -1,0 +1,73 @@
+---
+version: '3.8'
+
+services:
+  forti:
+    build: ./forti
+    cap_add:
+      - NET_ADMIN
+    secrets:
+      - source: forti
+        target: config
+        uid: '1000'
+        gid: '1000'
+        mode: 0400
+    sysctls:
+      - net.ipv4.ip_forward=1
+    devices:
+      - "/dev/ppp:/dev/ppp"
+    networks:
+      forti:
+        ipv4_address: 172.22.0.2
+    command: ["openfortivpn", "-c", "/run/secrets/config"]
+
+  tunnel_to:
+    build: ./tunnel_to
+    cap_add:
+      - NET_ADMIN
+    configs:
+      - source: tunnel_to_config
+        target: /app/glider.conf
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+    ports:
+      - 1080:8443
+    depends_on:
+      - forti
+    networks:
+      forti:
+        ipv4_address: 172.22.0.3
+  
+  tunnel_back:
+    image: nadoo/glider:v0.15.3
+    configs:
+      - source: tunnel_back_config
+        target: /app/glider.conf
+        uid: '1000'
+        gid: '1000'
+        mode: 0440
+    depends_on:
+      - forti
+    networks:
+      forti:
+        ipv4_address: 172.22.0.4
+    
+
+configs:
+  tunnel_to_config:
+    file: ./tunnel_to/glider.conf
+  tunnel_back_config:
+    file: ./tunnel_back/glider.conf
+
+secrets:
+  forti:
+    file: ./config
+
+networks:
+  forti:
+    name: "internal-network-for-vpn-stack"
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.22.0.0/24
