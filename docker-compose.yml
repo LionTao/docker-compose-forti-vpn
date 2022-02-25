@@ -19,6 +19,8 @@ services:
       - net.ipv4.ip_forward=1
     devices:
       - "/dev/ppp:/dev/ppp"
+    volumes:
+      - ${PWD}/resolv.conf:/etc/resolv.conf:rw
     networks:
       forti:
         ipv4_address: 172.22.0.2
@@ -41,6 +43,8 @@ services:
       - 1080:8443
     depends_on:
       - forti
+    volumes:
+      - ${PWD}/resolv.conf:/etc/resolv.conf:rw
     networks:
       forti:
         ipv4_address: 172.22.0.3

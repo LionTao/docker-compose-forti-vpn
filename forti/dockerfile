@@ -7,10 +7,9 @@ RUN if [ ${USE_MIRROR} ]; then sed -i "s|http://deb.debian.org/debian|http://mir
     apt-get install --no-install-recommends --yes iproute2 openfortivpn iptables && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ppp0-up.sh /etc/ppp/ip-up.d/99-ppp0-up
 COPY entrypoint.sh /usr/bin/entrypoint.sh
 
-RUN chmod 755 /etc/ppp/ip-up.d/99-ppp0-up && chmod 755 /usr/bin/entrypoint.sh
+RUN chmod 755 /usr/bin/entrypoint.sh
 
 ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
 CMD [ "openfortivpn" ]
