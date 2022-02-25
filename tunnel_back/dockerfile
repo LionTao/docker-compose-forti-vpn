@@ -1,17 +1,10 @@
 FROM nadoo/glider:v0.15.3
 
-USER root
-
 ARG USE_MIRROR=1
+
+USER root
 
 RUN if [ ${USE_MIRROR} ]; then sed -i 's/dl-cdn.alpinelinux.org/mirrors.sjtug.sjtu.edu.cn/g' /etc/apk/repositories ; fi && \
     apk add --no-cache tzdata
 
-COPY glider.conf /app/glider.conf
-
-COPY entrypoint.sh /usr/bin/entrypoint.sh
-RUN chmod 755 /usr/bin/entrypoint.sh
-
-WORKDIR /app
-ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
-CMD [ "/app/glider" ]
+USER glider

@@ -3,7 +3,10 @@ version: '3.8'
 
 services:
   forti:
+    image: forti:compose
     build: ./forti
+    environment:
+      - TZ=Asia/Shanghai
     cap_add:
       - NET_ADMIN
     secrets:
@@ -22,7 +25,10 @@ services:
     command: ["openfortivpn", "-c", "/run/secrets/config"]
 
   tunnel_to:
+    image: tunnel_to:compose
     build: ./tunnel_to
+    environment:
+      - TZ=Asia/Shanghai
     cap_add:
       - NET_ADMIN
     configs:
@@ -40,7 +46,10 @@ services:
         ipv4_address: 172.22.0.3
   
   tunnel_back:
-    image: nadoo/glider:v0.15.3
+    image: tunnel_back:compose
+    build: ./tunnel_back
+    environment:
+      - TZ=Asia/Shanghai
     configs:
       - source: tunnel_back_config
         target: /app/glider.conf
