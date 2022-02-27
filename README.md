@@ -1,4 +1,4 @@
-# Bi-directon proxy based on openfortivpn
+# Bi-direction proxy based on openfortivpn
 
 ## Overview
 1. Create a tunnel to private network inside fortivpn
